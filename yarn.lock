@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@devraelfreeze/discordjs-pagination@^2.7.6":
+  version "2.7.6"
+  resolved "https://registry.yarnpkg.com/@devraelfreeze/discordjs-pagination/-/discordjs-pagination-2.7.6.tgz#cc3a544fb35abbcab103c3af10ec0f38dff1bd1e"
+  integrity sha512-mK0iMCWsk9CJC58AyvUGGxHzBZTJlxaXaboxSvcA85Tg3d4X9rerZj7Q6L8boeTNh5mbfil8IoLYicvz7gai/w==
+  dependencies:
+    discord.js "^14.9.0"
+
 "@discord-player/equalizer@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@discord-player/equalizer/-/equalizer-0.2.3.tgz#a5a00150479db71d28d85ed162cf4954341e325a"
@@ -329,7 +336,7 @@ discord-voip@^0.1.3:
     tslib "^2.6.1"
     ws "^8.13.0"
 
-discord.js@^14.16.3:
+discord.js@^14.16.3, discord.js@^14.9.0:
   version "14.16.3"
   resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-14.16.3.tgz#9553366953c992469f47a55af2a11c2054a9babe"
   integrity sha512-EPCWE9OkA9DnFFNrO7Kl1WHHDYFXu3CNVFJg63bfU7hVtjZGyhShwZtSBImINQRWxWP2tgo2XI+QhdXx28r0aA==

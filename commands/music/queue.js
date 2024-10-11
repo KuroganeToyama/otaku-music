@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, userMention } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { pagination, ButtonTypes, ButtonStyles } = require('@devraelfreeze/discordjs-pagination');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -7,29 +8,69 @@ module.exports = {
     
     async execute(interaction, player) {
         await interaction.deferReply();
-        const embed = new EmbedBuilder().setTitle('Music Queue Information');
 
         const queue = player.nodes.get(interaction.guildId);
         if (!queue || !queue.isPlaying()) {
-            embed.setColor('Red')
-                .setDescription('There are no songs in queue');
+            const embed = new EmbedBuilder()
+                            .setTitle('Music Queue Information')
+                            .setColor('Red')
+                            .setDescription('There are no songs in queue!');
             await interaction.followUp({embeds: [embed]});
             return;
         }
 
-        const curr = [`0. **[${queue.currentTrack.title}](${queue.currentTrack.url})** (requested by: ${queue.currentTrack.requestedBy.username})`];
-        const inQueue = queue.tracks.map((track, i) => {
-            return `${i + 1}. **[${track.title}](${track.url})** (requested by: ${track.requestedBy.username})`;
-        });
+        // Counter for numbering
+        let counter = 1;
 
+        // List of tracks to be displayed
+        const curr = [`1) **[${queue.currentTrack.title}](${queue.currentTrack.url})** (requested by: ${queue.currentTrack.requestedBy.username})`];
+        const inQueue = queue.tracks.map((track) => {
+            ++counter;
+            return `${counter}) **[${track.title}](${track.url})** (requested by: ${track.requestedBy.username})`;
+        });
         const tracks = curr.concat(inQueue);
 
-        embed.setColor('Green')
-            .setDescription(tracks.join('\n'))
-            .setFooter({
-                text: `Currently playing: ${queue.currentTrack.title}`,
-            });
+        // List of embeds for pagination
+        let embedList = [];
+        const numOfTracks = tracks.length;
+        for (let i = 0; i < numOfTracks; i += 8) {
+            const startIdx = i;
+            const endIdx = (i + 8 <= numOfTracks - 1) ? (i + 8) : numOfTracks;
+            const section = tracks.slice(startIdx, endIdx);
+                
+            const embed = new EmbedBuilder()
+                            .setTitle('Music Queue Information')
+                            .setColor('Green')
+                            .setDescription(section.join('\n'))
+                            .setFooter({
+                                text: `Currently playing: ${queue.currentTrack.title}`,
+                            });
+            
+            embedList.push(embed);
+        }
 
-        await interaction.followUp({embeds: [embed]});
+        // Pagination
+        await pagination({
+            embeds: embedList,
+            author: interaction.member.user,
+            interaction: interaction,
+            ephemeral: true,
+            time: 60000,
+            disableButtons: false,
+            fastSkip: false,
+            pageTravel: false,
+            buttons: [
+                {
+                    type: ButtonTypes.previous,
+                    label: 'Prev',
+                    style: ButtonStyles.Primary
+                },
+                {
+                    type: ButtonTypes.next,
+                    label: 'Next',
+                    style: ButtonStyles.Success
+                }
+            ]
+        });
     },
 };
