@@ -1,0 +1,26 @@
+{
+  "name": "otaku-music",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "local:run": "node deploy-commands.js && node .",
+    "image:build": "docker build . -t otaku-music",
+    "clean": "docker compose down",
+    "stop": "docker compose stop",
+    "start": "docker compose up -d",
+    "restart": "docker compose restart",
+    "logs": "docker logs -f otaku-music",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@discord-player/extractor": "^4.5.1",
+    "@discordjs/opus": "^0.9.0",
+    "discord-player": "^6.7.1",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "ffmpeg": "^0.0.4",
+    "fluent-ffmpeg": "^2.1.3",
+    "ytdl-core": "^4.11.5"
+  }
+}
